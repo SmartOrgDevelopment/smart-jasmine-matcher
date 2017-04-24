@@ -19,10 +19,13 @@ var smartorg;
                                 compareObject(actual, expected, result);
                             }
                             else if (typeof expected === "string") {
-                                // compareString(actual, expected, result);
+                                compareString(actual, expected, result);
                             }
                             else if (typeof expected === "number") {
                                 compareNumber(actual, expected, result);
+                            }
+                            else if (typeof expected === "undefined") {
+                                compareUndefined(actual, expected, result);
                             }
                             return result;
                         }
@@ -31,12 +34,23 @@ var smartorg;
             };
             function compareArray(actual, expected, result) {
                 for (var i = 0; i < expected.length; i++) {
-                    if (typeof actual[i] === "number") {
+                    var expectedItem = expected[i];
+                    var actualItem = actual[i];
+                    if (typeof expectedItem === "string" && typeof actualItem === "string") {
+                        compareString(actualItem, expectedItem, result);
+                    }
+                    else if (typeof expectedItem === "number" && typeof actualItem === "number") {
                         compareNumber(actual[i], expected[i], result);
                         if (!result.pass) {
                             result.message = "Item " + i + " had a mismatch.\n" + result.message;
                             break;
                         }
+                    }
+                    else if (expectedItem instanceof Object && actualItem instanceof Object) {
+                        compareObject(actualItem, expectedItem, result);
+                    }
+                    else if (typeof expectedItem === "undefined") {
+                        compareUndefined(actualItem, expectedItem, result);
                     }
                 }
                 if (actual.length != expected.length) {
@@ -59,8 +73,8 @@ var smartorg;
                         else if (typeof expectedItem === "number") {
                             compareNumber(actualItem, expectedItem, result);
                         }
-                        else {
-                            // UNKNOWN TYPE!!!
+                        else if (typeof expectedItem === "undefined") {
+                            compareUndefined(actualItem, expectedItem, result);
                         }
                         if (!result.pass) {
                             result.message = "Mismatch in key '" + key + "':\n" + result.message;
@@ -98,16 +112,12 @@ var smartorg;
             matchers.compareNumber = compareNumber;
             function compareString(actual, expected, result) {
                 for (var i = 0; i < expected.length; i++) {
-                    // if (expected.length === 0) {
-                    //     result.message = "Expected is undefined";
-                    //     result.pass = false;
-                    //     break;
-                    // }
-                    // if (actual.length === 0) {
-                    //     result.message = "Actual is undefined";
-                    //     result.pass = false;
-                    //     break;
-                    // }
+                    if (!expected) {
+                        expected = "";
+                    }
+                    if (!actual) {
+                        actual = "";
+                    }
                     if (i < actual.length && expected[i] !== actual[i]) {
                         var backChars = Math.min(20, i);
                         var forwardCharsExp = Math.min(20, expected.length - i);
@@ -141,6 +151,13 @@ var smartorg;
                 }
             }
             matchers.compareString = compareString;
+            function compareUndefined(actual, expected, result) {
+                if (actual) {
+                    result.pass = false;
+                    result.message = result.message + "Expected undefined but got " + actual;
+                }
+            }
+            matchers.compareUndefined = compareUndefined;
         })(matchers = test.matchers || (test.matchers = {}));
     })(test = smartorg.test || (smartorg.test = {}));
 })(smartorg || (smartorg = {}));

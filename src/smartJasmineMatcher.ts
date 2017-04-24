@@ -18,9 +18,11 @@ module smartorg.test.matchers {
                     } else if (expected instanceof Object) {
                         compareObject(actual, expected, result);
                     } else if (typeof expected === "string") {
-                        // compareString(actual, expected, result);
+                        compareString(actual, expected, result);
                     } else if (typeof expected === "number") {
                         compareNumber(actual, expected, result);
+                    } else if (typeof expected === "undefined") {
+                        compareUndefined(actual, expected, result);
                     }
                     return result;
                 }
@@ -30,12 +32,20 @@ module smartorg.test.matchers {
 
     export function compareArray(actual: Array<any>, expected: Array<any>, result: Result) {
         for (var i = 0; i < expected.length; i++) {
-            if (typeof actual[i] === "number") {
+            var expectedItem = expected[i];
+            var actualItem = actual[i];
+            if (typeof expectedItem === "string" && typeof actualItem === "string") {
+                compareString(actualItem, expectedItem, result);
+            } else if (typeof expectedItem === "number" && typeof actualItem === "number") {
                 compareNumber(actual[i], expected[i], result);
                 if (!result.pass) {
                     result.message = "Item " + i + " had a mismatch.\n" + result.message;
                     break;
                 }
+            } else if (expectedItem instanceof Object && actualItem instanceof Object) {
+                compareObject(actualItem, expectedItem, result);
+            } else if (typeof expectedItem === "undefined") {
+                compareUndefined(actualItem, expectedItem, result);
             }
         }
         if (actual.length != expected.length) {
@@ -44,7 +54,6 @@ module smartorg.test.matchers {
                 "Expected array has " + expected.length +
                 " items while actual array has " + actual.length + "\n" +
                 result.message;
-
         }
     }
 
@@ -57,8 +66,8 @@ module smartorg.test.matchers {
                     compareString(actualItem, expectedItem, result);
                 } else if (typeof expectedItem === "number") {
                     compareNumber(actualItem, expectedItem, result);
-                } else {
-                    // UNKNOWN TYPE!!!
+                } else if (typeof expectedItem === "undefined") {
+                    compareUndefined(actualItem, expectedItem, result);
                 }
                 if (!result.pass) {
                     result.message = "Mismatch in key '" + key + "':\n" + result.message;
@@ -67,31 +76,26 @@ module smartorg.test.matchers {
                 result.message = "Expected object has key '" + key + "' (value: " + expectedItem + ") which could not be found in the actual object."
             }
         }
-
         if (actual.length != expected.length) {
             result.pass = false;
             result.message =
                 "Expected array has " + expected.length +
                 " items while actual array has " + actual.length + "\n" +
                 result.message;
-
         }
     }
 
     export function compareNumber(actual: number, expected: number, result: Result) {
         const DELTA = 0.0000001;
         let compareResult = Math.abs(expected - actual);
-
         // When key does not exist
         if (isNaN(compareResult)) {
             result.pass = false;
         }
-
         // Value does not match
         if (compareResult > DELTA) {
             result.pass = false;
         }
-
         if (!result.pass) {
             result.pass = false;
             result.message = result.message + "Expected " + actual + " to be " + expected;
@@ -101,16 +105,12 @@ module smartorg.test.matchers {
     export function compareString(actual: string, expected: string, result: Result) {
 
         for (var i = 0; i < expected.length; i++) {
-            // if (expected.length === 0) {
-            //     result.message = "Expected is undefined";
-            //     result.pass = false;
-            //     break;
-            // }
-            // if (actual.length === 0) {
-            //     result.message = "Actual is undefined";
-            //     result.pass = false;
-            //     break;
-            // }
+            if (!expected) {
+                expected = "";
+            }
+            if (!actual) {
+                actual = "";
+            }
             if (i < actual.length && expected[i] !== actual[i]) {
                 var backChars = Math.min(20, i);
                 var forwardCharsExp = Math.min(20, expected.length - i);
@@ -140,6 +140,13 @@ module smartorg.test.matchers {
         if (!result.pass) {
             result.pass = false;
             result.message = errorMessage + result.message;
+        }
+    }
+
+    export function compareUndefined(actual: string, expected: string, result: Result) {
+        if (actual) {
+            result.pass = false;
+            result.message = result.message + "Expected undefined but got " + actual;
         }
     }
 
