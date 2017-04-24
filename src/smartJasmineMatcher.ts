@@ -94,38 +94,52 @@ module smartorg.test.matchers {
 
         if (!result.pass) {
             result.pass = false;
-            result.message = "Expected " + actual + " to be " + expected;
+            result.message = result.message + "Expected " + actual + " to be " + expected;
         }
     }
 
     export function compareString(actual: string, expected: string, result: Result) {
+
         for (var i = 0; i < expected.length; i++) {
+            // if (expected.length === 0) {
+            //     result.message = "Expected is undefined";
+            //     result.pass = false;
+            //     break;
+            // }
+            // if (actual.length === 0) {
+            //     result.message = "Actual is undefined";
+            //     result.pass = false;
+            //     break;
+            // }
             if (i < actual.length && expected[i] !== actual[i]) {
                 var backChars = Math.min(20, i);
                 var forwardCharsExp = Math.min(20, expected.length - i);
                 var forwardChartsAct = Math.min(20, actual.length - i);
                 var expectedSome = expected.substring(i - backChars, i + forwardCharsExp);
-                var cursor = Array(backChars).join(" ") + "^";
+                var cursor = Array(backChars + 1).join(" ") + "^";
                 var actualSome = actual.substring(i - backChars, i + forwardChartsAct);
                 var preview = "Comparing\n" + expectedSome + "\n" + cursor
                     + "\nwith\n" + actualSome + "\n" + cursor;
                 result.pass = false;
                 var errorMessage = "Mismatch in character " + i + " when "
-                    + preview + "<===EXPECTED " + expected + " ==> with <===ACTUAL "
-                    + actual + " ==>";
+                    + preview + "\n<===EXPECTED " + expected + " ==> with <===ACTUAL "
+                    + actual + " ==>\n";
+                break;
             } else if (i === actual.length) {
-
+                result.pass = false;
                 errorMessage = "Expected string " + expected + " has more " +
                     "characters than actual string " + actual;
+                break;
             }
         }
         if (actual.length > expected.length && !errorMessage) {
+            result.pass = false;
             errorMessage = "Expected string " + expected + " has fewer " +
                 "characters than actual string " + actual;
         }
         if (!result.pass) {
             result.pass = false;
-            result.message = errorMessage;
+            result.message = errorMessage + result.message;
         }
     }
 
