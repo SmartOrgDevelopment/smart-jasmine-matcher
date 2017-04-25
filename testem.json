@@ -2,6 +2,6 @@
   "framework": "jasmine2",
   "src_files": [
     "src/smartJasmineMatcher.js",
-    "demo/matcherSpec.js"
+    "demo/matcherDemo.js"
   ]
 }
