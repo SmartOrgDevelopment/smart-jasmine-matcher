@@ -11,6 +11,7 @@ Here's an example:
     expect(string1).toEqual(string2);
 
 This produces the following failure message:
+
     Mismatch in character 23 when Comparing
     kee Doodle went to twon, riding on a pon
                         ^
