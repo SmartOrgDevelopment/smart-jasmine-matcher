@@ -23,3 +23,18 @@ This produces the following failure message:
 This pinpoints the precise location of the mismatch, and gives you enough of a preview snippet to get context.
 
 Advanced objects and arrays are also handled to show clear points of mismatch.
+
+## Installation
+
+Run:
+
+    bower install smart-jasmine-matcher --save-dev
+
+Then, before all your jasmine tests, add this code:
+
+    beforeEach(function () {
+        jasmine.addMatchers(smartorg.test.matchers.smartMatcher);
+    });
+
+That's it! Continue using toEqual as you may already have.
+Note that you must be on Jasmine 2 or higher.
