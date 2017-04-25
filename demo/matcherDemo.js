@@ -4,6 +4,11 @@ describe('Demonstrating Smart Jasmine Matcher, ', function () {
     beforeEach(function () {
         jasmine.addMatchers(smartorg.test.matchers.smartMatcher);
     });
+    it("temp", function () {
+        var string1 = "Yankee Doodle went to town, riding on a pony.";
+        var string2 = "Yankee Doodle went to twon, riding on a pony.";
+        expect(string1).toEqual(string2);
+    });
     describe("simple one-level dictionary", function () {
         var menloPark = { name: "Menlo Park", population: 10000 };
         it("with mismatch of values", function () {
