@@ -2,8 +2,8 @@
   "name": "smart-jasmine-matcher",
   "homepage": "https://github.com/smartorg/smart-jasmine-matcher",
   "authors": [
-    "yangpeng <ypeng@smartorg.com>",
-    "behappyrightnow <somik.raha@gmail.com>"
+    "Yang Peng <ypeng@smartorg.com>",
+    "Somik Raha <sraha@smartorg.com>"
   ],
   "description": "A smart matcher that overrides toEqual() in jasmine. Your existing tests will continue to work and give well-formatted failure messages pinpointing the source of failure. This is especially useful in large string comparisons or complex object/array comparisons.",
   "main": "src/smartJasmineMatcher.js",
