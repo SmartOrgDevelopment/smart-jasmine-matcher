@@ -5,7 +5,7 @@
     "Yang Peng <ypeng@smartorg.com>",
     "Somik Raha <sraha@smartorg.com>"
   ],
-  "description": "A smart matcher that overrides toEqual() in jasmine. Your existing tests will continue to work and give well-formatted failure messages pinpointing the source of failure. This is especially useful in large string comparisons or complex object/array comparisons.",
+  "description": "A smart matcher that overrides toEqual() in jasmine. Provides well-formatted failure messages pinpointing the source of failure.",
   "main": "src/smartJasmineMatcher.js",
   "keywords": [
     "smart",
