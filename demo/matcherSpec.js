@@ -4,6 +4,47 @@ describe('Demonstrating Smart Jasmine Matcher', function () {
     beforeEach(function () {
         jasmine.addMatchers(smartorg.test.matchers.smartMatcher);
     });
+    it("Failed undefined match", function () {
+        var a = { a: "abc", b: "aaa" };
+        var b = { a: "aaa", b: "aaa" };
+        expect(a).toEqual(b);
+    });
+    // it("Failed undefined match", function () {
+    //     let a = undefined;
+    //     let b = undefined;
+    //     expect(a).toBe(b);
+    // });
+    //
+    it("Failed undefined match", function () {
+        var a = 1;
+        var b = undefined;
+        expect(a).toBe(b);
+    });
+    //
+    // it("Failed undefined match", function () {
+    //     let a = undefined;
+    //     let b = "undefined";
+    //     expect(a).toBe(b);
+    // });
+    //
+    it("Failed undefined match", function () {
+        var a = 1;
+        var b = "1";
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
+    it("Failed undefined match", function () {
+        var a = [1];
+        var b = "1";
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
+    it("Failed undefined match", function () {
+        var a = [1];
+        var b = { a: "1" };
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
     it("Failed array of number match", function () {
         var a = [10, 20, 40];
         var b = [10, 30];

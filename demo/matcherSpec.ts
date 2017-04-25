@@ -6,86 +6,131 @@ describe('Demonstrating Smart Jasmine Matcher', function () {
         jasmine.addMatchers(smartorg.test.matchers.smartMatcher);
     });
 
+    it("Failed undefined match", function () {
+        let a = {a: "abc", b: "aaa"};
+        let b = {a: "aaa", b: "aaa"};
+        expect(a).toEqual(b);
+    });
+
+    // it("Failed undefined match", function () {
+    //     let a = undefined;
+    //     let b = undefined;
+    //     expect(a).toBe(b);
+    // });
+    //
+    it("Failed undefined match", function () {
+        let a = 1;
+        let b = undefined;
+        expect(a).toBe(b);
+    });
+    //
+    // it("Failed undefined match", function () {
+    //     let a = undefined;
+    //     let b = "undefined";
+    //     expect(a).toBe(b);
+    // });
+    //
+    it("Failed undefined match", function () {
+        let a = 1;
+        let b = "1";
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
+
+    it("Failed undefined match", function () {
+        let a = [1];
+        let b = "1";
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
+
+    it("Failed undefined match", function () {
+        let a = [1];
+        let b = {a: "1"};
+        // let result = expect(a as any).not.toEqual(b);
+        expect(a).toBe(b);
+    });
+
     it("Failed array of number match", function () {
-        var a = [10, 20, 40];
-        var b = [10, 30];
+        let a = [10, 20, 40];
+        let b = [10, 30];
         expect(a).toEqual(b);
     });
 
     it("Failed array of string match", function () {
-        var actual = ["aaa", "bhb", "cmc"];
-        var expected = ["abc", "bbb", "ccc"];
+        let actual = ["aaa", "bhb", "cmc"];
+        let expected = ["abc", "bbb", "ccc"];
         expect(actual).toEqual(expected);
     });
 
     it("Failed array with 0 length match", function () {
-        var actual = ["aaa", "bhb", "cmc"];
-        var expected = [];
+        let actual = ["aaa", "bhb", "cmc"];
+        let expected = [];
         expect(actual).toEqual(expected);
     });
 
     it("Failed array of object match", function () {
-        var actual = [{a: "aya"}, {b: "bkb"}];
-        var expected = [{a: "aaa"}, {b: "bbb"}];
+        let actual = [{a: "aya"}, {b: "bkb"}];
+        let expected = [{a: "aaa"}, {b: "bbb"}];
         expect(actual).toEqual(expected);
     });
 
     it("Failed array of undefined match", function () {
-        var actual = [undefined, {b: "bkb"}];
-        var expected = [undefined, undefined];
+        let actual = [undefined, {b: "bkb"}];
+        let expected = [undefined, undefined];
         expect(actual).toEqual(expected);
     });
 
     it("Failed object match 1", function () {
-        var menloPark = {name: "Menlo Park", population: 100000};
-        var mountainView = {name: "Mountain View", population: 200000};
+        let menloPark = {name: "Menlo Park", population: 100000};
+        let mountainView = {name: "Mountain View", population: 200000};
         expect(mountainView).toEqual(menloPark);
     });
 
     it("Failed object match 2", function () {
-        var menloPark = {name: "Menlo Park"};
-        var mountainView = {name: "Mountain View"};
+        let menloPark = {name: "Menlo Park"};
+        let mountainView = {name: "Mountain View"};
         expect(mountainView).toEqual(menloPark);
     });
 
     it("Failed stirng compare in object match 3", function () {
-        var actual = {name: ""};
-        var expected = {name: "b"};
+        let actual = {name: ""};
+        let expected = {name: "b"};
         expect(actual).toEqual(expected);
     });
 
     it("Failed stirng compare in object match 4", function () {
-        var actual = {name: "dfsfs"};
-        var expected = {name: ""};
+        let actual = {name: "dfsfs"};
+        let expected = {name: ""};
         expect(actual).toEqual(expected);
     });
 
     it("Failed stirng compare in object match 5", function () {
-        var actual = {name: "aaaa"};
-        var expected = {name: "bbbbb"};
+        let actual = {name: "aaaa"};
+        let expected = {name: "bbbbb"};
         expect(actual).toEqual(expected);
     });
 
     it("Failed stirng compare in object match 6", function () {
-        var actual = {name: "aaaa"};
-        var expected = {name: "abbbb"};
+        let actual = {name: "aaaa"};
+        let expected = {name: "abbbb"};
         expect(actual).toEqual(expected);
     });
 
     it("Failed undefined match", function () {
-        var actual = {name: "aaaa"};
-        var expected = {name: undefined};
+        let actual = {name: "aaaa"};
+        let expected = {name: undefined};
         expect(actual).toEqual(expected);
     });
 
     it("Failed object with multiple keys 1", function () {
-        var actual = {
+        let actual = {
             "SendBack": "Tree!F11",
             "Key": "value_given_success",
             "Reference": "TornadoDistOutputs[0].Mean",
             "Title": "Mean" //diff line
         };
-        var expected = {
+        let expected = {
             "SendBack": "Tree!F11",
             "Key": "value_given_success",
             "Reference": "TornadoDistOutputs[0].Mean",
@@ -95,13 +140,13 @@ describe('Demonstrating Smart Jasmine Matcher', function () {
     });
 
     it("Failed object with multiple keys 2", function () {
-        var actual = {
+        let actual = {
             "SendBack": "Tree!F11",
             "Key": "value_given_success",
             "Reference": "TornadoDistOutputs[0].Mean",
             "Title": "Meen" //diff line
         };
-        var expected = {
+        let expected = {
             "SendBack": "Tree!F11",
             "Key": "value_given_success",
             "Reference": "TornadoDistOutputs[0].Mean",
@@ -111,7 +156,7 @@ describe('Demonstrating Smart Jasmine Matcher', function () {
     });
 
     it("Failed array of objects match", function () {
-        var postProcessing = [
+        let postProcessing = [
             {
                 "SendBack": "Tree!F11",
                 "Key": "value_given_success",
@@ -137,7 +182,7 @@ describe('Demonstrating Smart Jasmine Matcher', function () {
                 "Title": "Low of Net-Present Value"
             }
         ];
-        var expectedPostProcessing = [
+        let expectedPostProcessing = [
             {
                 "SendBack": "Tree!F11",
                 "Key": "value_given_success",
