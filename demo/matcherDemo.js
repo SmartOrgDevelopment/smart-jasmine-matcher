@@ -177,7 +177,7 @@ describe('Demonstrating Smart Jasmine Matcher, ', function () {
         var mountainView = { name: "Mountain View" };
         expect(mountainView).toEqual(menloPark);
     });
-    it("Failed stirng compare in object match 3", function () {
+    it("Failed string compare in object match 3", function () {
         var actual = { name: "" };
         var expected = { name: "b" };
         expect(actual).toEqual(expected);

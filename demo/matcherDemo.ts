@@ -197,7 +197,7 @@ describe('Demonstrating Smart Jasmine Matcher, ', function () {
         expect(mountainView).toEqual(menloPark);
     });
 
-    it("Failed stirng compare in object match 3", function () {
+    it("Failed string compare in object match 3", function () {
         let actual = {name: ""};
         let expected = {name: "b"};
         expect(actual).toEqual(expected);

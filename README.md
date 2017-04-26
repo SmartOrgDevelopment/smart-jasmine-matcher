@@ -24,11 +24,85 @@ This pinpoints the precise location of the mismatch, and gives you enough of a p
 
 Advanced objects and arrays are also handled to show clear points of mismatch.
 
+For example, here is an object of arrays:
+
+    describe("Object of arrays", function () {
+        let sprintRecords = {
+            UsainBolt: [10,11,1.5],
+            CarlLewis: [12,13,2]
+        };
+        it("mismatch", function() {
+            let otherSprintRecords = {
+                UsainBolt: [12,11,1.5],
+                CarlLewis: [12,15,2]
+            };
+            expect(otherSprintRecords).toEqual(sprintRecords);
+        });
+
+    });
+    
+The above test produces the following failure:
+    
+    Mismatch in key 'UsainBolt':
+	    Item 0 had a mismatch.
+		    Expected 12 to be 10
+	
+    Mismatch in key 'CarlLewis':
+	    Item 1 had a mismatch.
+		    Expected 15 to be 13
+		    
+Let's now look at an array of objects:
+		    
+    describe("Array of objects", function () {
+        let citiesInBayArea = [
+            { "name": "Menlo Park", population: 10000},
+            { "name": "Mountain View", population: 20000}
+        ];
+        it("mismatch", function() {
+            let anotherListOfCitiesInBayArea = [
+                { "name": "Menla Park", population: 15000},
+                { "name": "Moontain View", population: 21000}
+            ];
+            expect(anotherListOfCitiesInBayArea).toEqual(citiesInBayArea);
+        });
+
+    });
+    
+This produces the following failure:
+
+        Item 0 had a mismatch.
+            Mismatch in key 'name':
+                Mismatch in character 4 when Comparing
+                Menlo Park
+                    ^
+                with
+                Menla Park
+                    ^
+                <===EXPECTED Menlo Park ==> with <===ACTUAL Menla Park ==>
+            
+            Mismatch in key 'population':
+                Expected 15000 to be 10000
+	
+        Item 1 had a mismatch.
+            Mismatch in key 'name':
+                Mismatch in character 2 when Comparing
+                Mountain View
+                  ^
+                with
+                Moontain View
+                  ^
+                <===EXPECTED Mountain View ==> with <===ACTUAL Moontain View ==>
+            
+            Mismatch in key 'population':
+                Expected 21000 to be 20000
+            
 ## Installation
 
 Run:
 
     bower install smart-jasmine-matcher --save-dev
+
+Include bower_components/smart-jasmine-matcher/src/smartJasmineMatcher.js in your src imports.
 
 Then, before all your jasmine tests, add this code:
 
