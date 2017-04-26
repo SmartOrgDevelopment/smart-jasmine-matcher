@@ -8,30 +8,30 @@ var smartorg;
                 toEqual: function () {
                     return {
                         compare: function (actual, expected) {
-                            var result = {
-                                pass: true,
-                                message: ""
-                            };
-                            if (expected instanceof Array) {
-                                result = compareArray(actual, expected);
-                            }
-                            else if (expected instanceof Object) {
-                                result = compareObject(actual, expected);
-                            }
-                            else if (typeof expected === "string") {
-                                result = compareString(actual, expected);
-                            }
-                            else if (typeof expected === "number") {
-                                result = compareNumber(actual, expected);
-                            }
-                            else if (typeof expected === "undefined") {
-                                result = compareUndefined(actual, expected);
-                            }
-                            return result;
+                            return compareByType(expected, actual);
                         }
                     };
                 }
             };
+            function compareByType(expected, actual) {
+                if (expected instanceof Array) {
+                    return compareArray(actual, expected);
+                }
+                else if (expected instanceof Object) {
+                    return compareObject(actual, expected);
+                }
+                else if (typeof expected === "string") {
+                    return compareString(actual, expected);
+                }
+                else if (typeof expected === "number") {
+                    return compareNumber(actual, expected);
+                }
+                else if (typeof expected === "undefined") {
+                    return compareUndefined(actual, expected);
+                }
+                throw new TypeUnknownException("Unknown type (" + typeof expected + ")");
+            }
+            matchers.compareByType = compareByType;
             function compareArray(actual, expected) {
                 var result = { pass: true, message: "" };
                 if (actual === undefined) {
@@ -42,21 +42,7 @@ var smartorg;
                     var expectedItem = expected[i];
                     var actualItem = actual[i];
                     var testResult = { pass: true, message: "" };
-                    if (typeof expectedItem === "string" && typeof actualItem === "string") {
-                        testResult = compareString(actualItem, expectedItem);
-                    }
-                    else if (typeof expectedItem === "number" && typeof actualItem === "number") {
-                        testResult = compareNumber(actualItem, expectedItem);
-                    }
-                    else if (expectedItem instanceof Array) {
-                        testResult = compareArray(actualItem, expectedItem);
-                    }
-                    else if (expectedItem instanceof Object && actualItem instanceof Object) {
-                        testResult = compareObject(actualItem, expectedItem);
-                    }
-                    else if (typeof expectedItem === "undefined") {
-                        testResult = compareUndefined(actualItem, expectedItem);
-                    }
+                    testResult = compareByType(expectedItem, actualItem, testResult);
                     if (!testResult.pass) {
                         fail(result, "Item " + i + " had a mismatch.\n" + tab(testResult.message) + "\n");
                     }
@@ -73,7 +59,9 @@ var smartorg;
             matchers.compareArray = compareArray;
             function tab(someString) {
                 var lines = someString.split("\n");
-                var tabbedLines = lines.map(function (line) { return "\t" + line; });
+                var tabbedLines = lines.map(function (line) {
+                    return "\t" + line;
+                });
                 return tabbedLines.join("\n");
             }
             matchers.tab = tab;
@@ -104,21 +92,7 @@ var smartorg;
                     if (key in actual) {
                         var actualItem = actual[key];
                         var testResult = { pass: true, message: "" };
-                        if (typeof expectedItem === "string") {
-                            testResult = compareString(actualItem, expectedItem);
-                        }
-                        else if (typeof expectedItem === "number") {
-                            testResult = compareNumber(actualItem, expectedItem);
-                        }
-                        else if (typeof expectedItem === "undefined") {
-                            testResult = compareUndefined(actualItem, expectedItem);
-                        }
-                        else if (expectedItem instanceof Array) {
-                            testResult = compareArray(actualItem, expectedItem);
-                        }
-                        else if (expectedItem instanceof Object) {
-                            testResult = compareObject(actualItem, expectedItem);
-                        }
+                        testResult = compareByType(expectedItem, actualItem, testResult);
                         if (!testResult.pass) {
                             fail(result, "Mismatch in key '" + key + "':\n" + tab(testResult.message) + "\n");
                         }
@@ -144,14 +118,14 @@ var smartorg;
                     testResult.pass = false;
                 }
                 if (!testResult.pass) {
-                    testResult.pass = false;
-                    testResult.message = "Expected " + actual + " to be " + expected;
+                    fail(testResult, "Expected " + actual + " to be " + expected);
                 }
                 return testResult;
             }
             matchers.compareNumber = compareNumber;
             function compareString(actual, expected) {
                 var testResult = { pass: true, message: "" };
+                var errorMessage;
                 for (var i = 0; i < expected.length; i++) {
                     if (!expected) {
                         expected = "";
@@ -169,7 +143,7 @@ var smartorg;
                         var preview = "Comparing\n" + expectedSome + "\n" + cursor
                             + "\nwith\n" + actualSome + "\n" + cursor;
                         testResult.pass = false;
-                        var errorMessage = "Mismatch in character " + i + " when "
+                        errorMessage = "Mismatch in character " + i + " when "
                             + preview + "\n<===EXPECTED " + expected + " ==> with <===ACTUAL "
                             + actual + " ==>\n";
                         break;
@@ -202,6 +176,12 @@ var smartorg;
                 return testResult;
             }
             matchers.compareUndefined = compareUndefined;
+            var TypeUnknownException = (function () {
+                function TypeUnknownException(message) {
+                    this.message = message;
+                }
+                return TypeUnknownException;
+            }());
         })(matchers = test.matchers || (test.matchers = {}));
     })(test = smartorg.test || (smartorg.test = {}));
 })(smartorg || (smartorg = {}));
