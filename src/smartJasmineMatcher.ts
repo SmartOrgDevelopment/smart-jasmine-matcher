@@ -26,8 +26,10 @@ module smartorg.test.matchers {
             return compareNumber(actual, expected);
         } else if (typeof expected === "undefined") {
             return compareUndefined(actual, expected);
+        } else if (typeof expected === "boolean") {
+            return compareBoolean(actual, expected);
         }
-        throw new TypeUnknownException("Unknown type ("+typeof expected+")");
+        throw new TypeUnknownException("Unknown type (" + typeof expected + ")");
     }
 
     export function compareArray(actual: Array<any>, expected: Array<any>): Result {
@@ -174,9 +176,19 @@ module smartorg.test.matchers {
         return testResult;
     }
 
+    export function compareBoolean(actual: boolean, expected: boolean){
+        let testResult: Result = {pass: true, message:""};
+        if (actual !== expected){
+            testResult.pass = false;
+            testResult.message = "Expected " + expected + " but got " + actual;
+        }
+        return testResult;
+    }
+
     class TypeUnknownException {
         message: string;
-        constructor(message:string) {
+
+        constructor(message: string) {
             this.message = message;
         }
     }

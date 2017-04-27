@@ -29,6 +29,9 @@ var smartorg;
                 else if (typeof expected === "undefined") {
                     return compareUndefined(actual, expected);
                 }
+                else if (typeof expected === "boolean") {
+                    return compareBoolean(actual, expected);
+                }
                 throw new TypeUnknownException("Unknown type (" + typeof expected + ")");
             }
             matchers.compareByType = compareByType;
@@ -176,6 +179,15 @@ var smartorg;
                 return testResult;
             }
             matchers.compareUndefined = compareUndefined;
+            function compareBoolean(actual, expected) {
+                var testResult = { pass: true, message: "" };
+                if (actual !== expected) {
+                    testResult.pass = false;
+                    testResult.message = "Expected " + expected + " but got " + actual;
+                }
+                return testResult;
+            }
+            matchers.compareBoolean = compareBoolean;
             var TypeUnknownException = (function () {
                 function TypeUnknownException(message) {
                     this.message = message;
